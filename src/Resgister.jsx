@@ -48,7 +48,7 @@ const Register = () => {
                     text: '¡Bienvenido!',
                     didClose: () => {
                         // Redirigir al login después de que el usuario cierre la alerta
-                        window.location.href = '/Login';
+                        window.location.href = '/';
                     },
                 })
 
@@ -143,7 +143,7 @@ const Register = () => {
                     </form>
                 </div>
                 <div className="card-footer">
-                    <p className="text-center">¿Ya tienes una cuenta? <Link to="/Login">Iniciar Sesión</Link></p>
+                    <p className="text-center">¿Ya tienes una cuenta? <Link to="/">Iniciar Sesión</Link></p>
                 </div>
             </div>
         </div>

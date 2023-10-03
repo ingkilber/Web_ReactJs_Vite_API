@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
 
 const backgroundStyle = {
   backgroundImage: 'url("https://img.freepik.com/vector-gratis/fondo-particulas-tecnologia-realista-abstracta_52683-33064.jpg")',
@@ -12,8 +13,9 @@ const backgroundStyle = {
 const Login = () => {
 
   // Estados para almacenar los valores de email y contraseña
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
   // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
@@ -31,13 +33,23 @@ const Login = () => {
       // response.status === 200
       if (response.ok) {
 
-        Swal.fire({
-          icon: 'success',
-          title: 'Inicio de sesión exitoso',
-          text: '¡Bienvenido!',
-        })
+        const data = await response.json()
+        const authToken = data.token
 
-        console.log('Inicio de sesión exitoso', response)
+        // Almacena el token en localStorage
+        localStorage.setItem('authToken', authToken)
+
+        Swal.fire({
+          icon: "success",
+          title: "Inicio de sesión exitoso",
+          text: "¡Bienvenido!",
+        });
+
+        console.log("Inicio de sesión exitoso", response);
+
+        // Redirige al usuario a la página de Dashboard
+        navigate('/Dashboard');
+
       } else {
 
         Swal.fire({
