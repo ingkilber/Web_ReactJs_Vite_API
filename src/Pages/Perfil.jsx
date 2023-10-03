@@ -1,17 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Perfil = () => {
+
+  const authToken = localStorage.getItem("authToken")
+  const id = localStorage.getItem('id') // Obtiene el ID del usuario
+
+  const navigate = useNavigate()
+
   // Estado para almacenar los datos del perfil
   const [profileData, setProfileData] = useState({
-    firstName: "John",
-    lastName: "Doe",
-    email: "johndoe@example.com",
+    name: "",
+    lastName: "administrador",
+    email: "",
     bio: "Este es mi perfil.",
-  });
+  })
 
-  // Estado para habilitar o deshabilitar la edición
-  const [isEditing, setIsEditing] = useState(false);
+  // const [editedProfileData, setEditedProfileData] = useState({ ...profileData })
+
+  // Habilitar o deshabilitar la edición
+  const [isEditing, setIsEditing] = useState(false)
+
+  useEffect(() => {
+    fetch(`http://127.0.0.1:8000/api/users`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("La solicitud no fue exitosa");
+        }
+      })
+      .then((data) => {
+        console.log("🚀 ~ file: Perfil.jsx:38 ~ .then ~ data:", data)
+        // Encontrar el usuario específico por ID
+        const user = data.users.find((user) => user.id === parseInt(id, 10))
+        if (user) {
+          // Actualizar el estado con los datos del perfil
+          setProfileData({
+            name: user.name,
+            email: user.email,
+          })
+        }
+      })
+      .catch((error) => {
+        console.error("Error en la solicitud:", error);
+      })
+  }, [authToken, id])
 
   // Función para manejar cambios en los campos del formulario
   const handleInputChange = (e) => {
@@ -19,15 +60,42 @@ const Perfil = () => {
     setProfileData({
       ...profileData,
       [name]: value,
-    });
-  };
+    })
+  }
 
   // Función para manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
     // Aquí puedes enviar los datos actualizados al servidor o realizar otras acciones necesarias
-    setIsEditing(false);
-  };
+    fetch(`http://127.0.0.1:8000/api/user/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify(profileData),
+    })
+      .then((response) => {
+        if (response.ok) {
+
+          Swal.fire({
+            icon: "success",
+            title: "Usuario actualizado exitosamente",
+            text: "¡Actualizado!",
+          });
+
+          setIsEditing(false)
+          // Redirige al usuario a la página de Dashboard
+        navigate('/Dashboard')
+
+        } else {
+          throw new Error("La solicitud no fue exitosa");
+        }
+      })
+      .catch((error) => {
+        console.error("Error en la solicitud:", error);
+      })
+  }
 
   return (
     <>
@@ -65,15 +133,15 @@ const Perfil = () => {
           <div className="col-md-8">
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label htmlFor="firstName" className="form-label">
+                <label htmlFor="name" className="form-label">
                   Nombre
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="firstName"
-                  name="firstName"
-                  value={profileData.firstName}
+                  id="name"
+                  name="name"
+                  value={profileData.name}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
                 />
