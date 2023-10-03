@@ -112,7 +112,6 @@ const Perfil = () => {
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">Avatar</label>
               <img
                 src="https://yt3.googleusercontent.com/vRF8BHREiJ3Y16AbMxEi_oEuoQlnNNqGpgULuZ6zrWSAi24HcxX3Vko42RN8ToctH-G0qlWd=s900-c-k-c0x00ffffff-no-rj"
                 alt="Avatar"
