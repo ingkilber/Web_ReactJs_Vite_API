@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const Perfil = () => {
@@ -17,8 +17,6 @@ const Perfil = () => {
     email: "",
     bio: "Este es mi perfil.",
   })
-
-  // const [editedProfileData, setEditedProfileData] = useState({ ...profileData })
 
   // Habilitar o deshabilitar la edición
   const [isEditing, setIsEditing] = useState(false)
@@ -38,7 +36,6 @@ const Perfil = () => {
         }
       })
       .then((data) => {
-        console.log("🚀 ~ file: Perfil.jsx:38 ~ .then ~ data:", data)
         // Encontrar el usuario específico por ID
         const user = data.users.find((user) => user.id === parseInt(id, 10))
         if (user) {
