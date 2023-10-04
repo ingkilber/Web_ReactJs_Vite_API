@@ -1,4 +1,4 @@
-# web-reactjs-vite-laravel9
+# sistema de gestión de usuarios
 
 Bienvenido al sistema de gestión de usuarios con inicio de sesión. Esta plataforma proporciona una manera eficiente de administrar y supervisar la información de los usuarios registrados, aprovechando la potencia de la API hecha con (Laravel 9 & Sanctum) para su funcionamiento. Aquí tienes un resumen de las características clave:
 
